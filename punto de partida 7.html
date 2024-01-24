@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Selección de Box para Clase</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #000000;
+      color: #000000;
+    }
+
+    .header {
+      text-align: center;
+      padding: 25px;
+      font-size: 30px;
+      background-color: #ffffff;
+      color: #000000;
+      margin-bottom: 30px;
+      border-radius: 15px;
+    }
+
+    .button-container {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 30px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .button-group {
+      grid-column: span 7;
+      text-align: center;
+      font-weight: bold;
+      font-size: 24px;
+      margin-top: 10px;
+      background-color: #f0f0f0;
+      color: #000000;
+      margin-bottom: 0.5px;
+      border-radius: 5px;
+      padding: 10px;
+      border: 2px solid #000000;
+    }
+
+    .subtitle {
+      font-style: helvetica;
+      font-size: 14px;
+      background-color: #5c5b5b;
+      color: #ffffff;
+      padding: 4px;
+      border-radius: 5px;
+      text-align: center;
+      margin-bottom: 40px;
+      border: 1px solid #333;
+    }
+
+    .number-button {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #333;
+      color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      border: 3px solid #f0f0f0;
+      transition: background-color 0.3s ease;
+    }
+
+    .number-button.black {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+
+    .name-display {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      background-color: #333;
+      padding: 12px;
+      border-radius: 5px;
+      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+      color: #f0f0f0;
+      font-size: 12px;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background-color: #f0f0f0;
+      padding: 20px;
+      border-radius: 5px;
+      text-align: center;
+      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+      max-width: 300px;
+      margin: auto;
+    }
+
+    #nameInput {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    #closeModal,
+    #acceptName,
+    #clearName,
+    #resetAllButton {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    #acceptName {
+      background-color: #27ae60;
+      color: white;
+    }
+
+    #closeModal {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    #clearName {
+      background-color: #ff1900;
+      color: white;
+    }
+
+    #resetAllButton {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .separator {
+      height: 10px;
+      background-color: transparent;
+      border: none;
+    }
+
+    .image-container {
+      text-align: center;
+      margin-top: 10%;
+    }
+
+    .image-container img {
+      max-width: 10%;
+      max-height: 10%;
+      border-radius: 50%;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+
+  <div class="header">¿Qué Box vas a elegir hoy para tu clase?</div>
+
+  <div class="button-group">PLANTA BAJA</div>
+  <div class="subtitle">(Punto de registro 1)</div>
+  <div class="button-container" id="button-container">
+  </div>
+  <div class="separator"></div>
+
+  <div class="subtitle">(Punto de registro 2)</div>
+  <div class="button-container" id="button-container2">
+  </div>
+  <div class="separator"></div>
+
+  <div class="button-group">PRIMER PISO</div>
+  <div class="subtitle">(Punto de registro 4)</div>
+  <div class="button-container" id="button-container3">
+  </div>
+  <div class="separator"></div>
+
+  <div class="button-group">PATIO</div>
+  <div class="subtitle">(Punto de registro 3)</div>
+  <div class="button-container" id="button-container4">
+  </div>
+
+  <!-- Modal para ingresar o borrar el nombre -->
+  <div class="modal" id="nameModal">
+    <div class="modal-content">
+      <label for="nameInput">Ingresa tú nombre:</label>
+      <input type="text" id="nameInput" />
+      <br>
+      <button class="action-button" id="acceptName">Aceptar</button>
+      <button id="closeModal">Cancelar</button>
+      <button class="action-button" id="clearName">Borrar Nombre</button>
+    </div>
+  </div>
+
+  <!-- Contenedor para la imagen -->
+  <div class="image-container">
+    <img src="FT BLANCO.png" alt="Descripción de la imagen">
+  </div>
+
+  <!-- Botón de reinicio -->
+  <button class="action-button" id="resetAllButton">Reiniciar Todo</button>
+
+  <audio id="audio" src="clic.mp3"></audio>
+
+  <script>
+    // Asegurarse de que el DOM esté listo
+    $(document).ready(function () {
+      // Crear botones numerados
+      function createButtons(containerId, start, end) {
+        for (let i = start; i <= end; i++) {
+          const button = $('<div>', {
+            class: 'number-button',
+            text: i,
+            id: 'button' + i,
+            data: {
+              touchCount: 0,
+              timeoutId: null,
+              hasName: false
+            }
+          });
+
+          // Cargar nombre desde localStorage al cargar la página
+          const savedName = localStorage.getItem(button.attr('id'));
+          if (savedName) {
+            const nameDisplay = $('<div>', {
+              class: 'name-display',
+              text: savedName
+            });
+            button.append(nameDisplay);
+            button.data('hasName', true);
+          }
+
+          // Asignar eventos de clic y mantenimiento presionado
+          button.mousedown(function () {
+            const timeoutId = setTimeout(() => {
+              if ($(this).data('hasName')) {
+                $('#clearName').show();
+              }
+            }, 3000);
+
+            $(this).data('timeoutId', timeoutId);
+          }).mouseup(function () {
+            clearTimeout($(this).data('timeoutId'));
+          }).click(function () {
+            const hasName = $(this).data('hasName');
+            const touchCount = $(this).data('touchCount') + 1;
+            $(this).data('touchCount', touchCount);
+
+            if (hasName) {
+              $('#nameInput').val('');
+              $('#nameModal').css('display', 'flex');
+              currentButton = $(this);
+            } else if (!$(this).hasClass('black')) {
+              if (touchCount === 5) {
+                $(this).removeClass('black');
+                $(this).find('.name-display').remove();
+                $(this).data('hasName', false);
+                $(this).data('touchCount', 0);
+                $('#clearName').hide();
+                playAudio();
+                // Elimina el nombre almacenado en localStorage al borrarlo del botón
+                localStorage.removeItem($(this).attr('id'));
+              } else {
+                $('#nameInput').val('');
+                $('#nameModal').css('display', 'flex');
+                currentButton = $(this);
+                $('#clearName').hide();
+                playAudio();
+              }
+            }
+          });
+
+          $(containerId).append(button);
+        }
+      }
+
+      createButtons('#button-container', 1, 7);
+      createButtons('#button-container2', 8, 14);
+      createButtons('#button-container3', 15, 21);
+      createButtons('#button-container4', 1, 7);
+
+      $('#closeModal').click(function () {
+        $('#nameModal').css('display', 'none');
+      });
+
+      $('#acceptName').click(function () {
+        const enteredName = $('#nameInput').val();
+        if (enteredName) {
+          const nameDisplay = $('<div>', {
+            class: 'name-display',
+            text: enteredName
+          });
+          currentButton.append(nameDisplay);
+          currentButton.data('hasName', true);
+          $('#clearName').show();
+          playAudio();
+          // Guarda el nombre en localStorage al aceptarlo
+          localStorage.setItem(currentButton.attr('id'), enteredName);
+        }
+
+        $('#nameModal').css('display', 'none');
+      });
+
+      $('#clearName').click(function () {
+        currentButton.find('.name-display').remove();
+        currentButton.data('hasName', false);
+        $('#nameModal').css('display', 'none');
+        // Elimina el nombre almacenado en localStorage al borrarlo del botón
+        localStorage.removeItem(currentButton.attr('id'));
+      });
+
+      // Botón de reinicio para borrar todos los nombres
+      $('#resetAllButton').click(function () {
+        // Borrar todos los nombres almacenados en localStorage
+        localStorage.clear();
+
+        // Eliminar los nombres de los botones en la interfaz
+        $('.name-display').remove();
+        $('.number-button').data('hasName', false);
+
+        // Ocultar el botón de borrar nombre
+        $('#clearName').hide();
+
+        // Cerrar el modal si está abierto
+        $('#nameModal').css('display', 'none');
+      });
+
+      let currentButton;
+
+      // Función para reproducir el audio
+      function playAudio() {
+        document.getElementById('audio').play();
+      }
+    });
+  </script>
+
+</body>
+
+</html>
